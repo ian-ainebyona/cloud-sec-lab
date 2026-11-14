@@ -1,0 +1,23 @@
+version: '3.8'
+
+services:
+  garage:
+    image: dxflrs/garage:v1.0.1
+    container_name: block1-garage
+    restart: unless-stopped
+    ports:
+      - "3900:3900" # S3 API endpoint
+      - "3901:3901" # Internal cluster RPC
+      - "3903:3903" # Admin API dashboard
+    volumes:
+      - ./config/garage.toml:/etc/garage.toml:ro
+      - ./data/meta:/var/lib/garage/meta
+      - ./data/data:/var/lib/garage/data
+    environment:
+      - RUST_LOG=info
+    networks:
+      - cloud-net
+
+networks:
+  cloud-net:
+    driver: bridge
